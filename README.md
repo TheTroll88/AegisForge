@@ -1,6 +1,6 @@
 # AegisForge
 
-An AI-driven, all-in-one financial platform. Trading, mining, farming, security — automated and accessible to everyone regardless of experience level.
+A low-cost, AI-driven crypto trading platform with ease-of-use at its core. Future stock market integration planned.
 
 **Token**: [AegisSignal (ASIG)](https://aegissignal.io) on Base chain — the community token powering the AegisForge ecosystem.
 
@@ -50,7 +50,7 @@ AegisForge/
 ## Planned Features
 
 - [ ] AI trading engine — same quality for all users, no tier levels
-- [ ] Free paper trading — see real results with simulated funds before risking anything
+- [ ] Paper trading — see real results with simulated funds before risking anything
 - [ ] **AI penetration testing bot** — autonomous ethical hacker, sellable standalone to companies
   - Self-learning agent that probes systems from every angle (inside and outside)
   - Finds vulnerabilities, logs exactly how it got in, reports to the security team
@@ -77,9 +77,9 @@ AegisForge/
 
 > "If it works for me and gets me out of my hole, there's another dude sitting behind a screen looking for a way out. And if I can give that to him, that's the payment."
 
-This project exists because the AI finance space is full of greed. Premium tiers for the same bot. Paywalled paper trading. Features locked behind subscriptions that cost more than most people can afford.
+This project exists because the AI finance space is full of greed. Premium tiers for the same bot. Features locked behind subscriptions that cost more than most people can afford.
 
-AegisForge is built on the principle that if the AI is good enough, it pays for itself — for the creator and the users. No one gets a lesser version. The bots work for everyone equally.
+AegisForge is built on one principle: every user gets the same quality. No watered-down free tier, no premium-only features. Low-cost access, one level of service, and bots that work for everyone equally.
 
 If a trading bot hits 65% success rate, every single user gets that 65%. Period.
 
