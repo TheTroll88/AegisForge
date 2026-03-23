@@ -1,8 +1,6 @@
 # AegisForge
 
-A low-cost, AI-driven crypto trading platform with ease-of-use at its core. Future stock market integration planned.
-
-**Token**: [AegisSignal (ASIG)](https://aegissignal.io) on Base chain — the community token powering the AegisForge ecosystem.
+Low-cost AI-driven crypto trading. Paper trading with real results. Smart wallet with auto-bridging and gas abstraction. Self-hosted AI — no third-party API key reselling. Autonomous security pentesting bot. [ASIG token](https://aegissignal.io) on Base chain. Stock market integration planned.
 
 ## Vision
 
