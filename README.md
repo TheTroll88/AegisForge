@@ -52,6 +52,11 @@ AegisForge/
 - [ ] Free paper trading — see real results with simulated funds before risking anything
 - [ ] Security vulnerability scanner — 24/7 automated detection, sellable standalone to companies
 - [ ] ASIG token integration — faucet rewards, ecosystem participation, on-chain utility
+- [ ] **Smart wallet** — multi-chain with automatic bridge detection and gas abstraction
+  - Auto-detects chain mismatches and routes through bridges (no lost funds)
+  - Gas fees deducted from the token being sent (no separate native token balance needed)
+  - One-step sends: "send X tokens to this address" and it just works
+  - Account abstraction (ERC-4337) + paymaster for gasless UX
 - [ ] Custom blockchain miners (original, not third-party)
 - [ ] Multi-chain airdrop discovery
 - [ ] AI-driven news, risk analysis, and token security checks
