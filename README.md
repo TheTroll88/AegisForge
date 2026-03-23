@@ -1,6 +1,6 @@
 # AegisForge
 
-Low-cost AI-driven crypto trading. Paper trading with real results. Smart wallet with auto-bridging and gas abstraction. Self-hosted AI — no third-party API key reselling. Autonomous security pentesting bot. [ASIG token](https://aegissignal.io) on Base chain. Stock market integration planned.
+Low-cost AI-driven crypto trading. Paper trading with real results. Smart wallet with auto-bridging and gas abstraction. AI airdrop finder. Self-hosted AI — no third-party API key reselling. [ASIG token](https://aegissignal.io) on Base chain. Stock market integration planned.
 
 ## Vision
 
@@ -49,11 +49,6 @@ AegisForge/
 
 - [ ] AI trading engine — same quality for all users, no tier levels
 - [ ] Paper trading — see real results with simulated funds before risking anything
-- [ ] **AI penetration testing bot** — autonomous ethical hacker, sellable standalone to companies
-  - Self-learning agent that probes systems from every angle (inside and outside)
-  - Finds vulnerabilities, logs exactly how it got in, reports to the security team
-  - Never exploits, never corrupts — observe, document, report
-  - Thinks freely, adapts approaches, tests what a real attacker would try
 - [ ] ASIG token integration — faucet rewards, ecosystem participation, on-chain utility
 - [ ] **Smart wallet** — multi-chain with automatic bridge detection and gas abstraction
   - Auto-detects chain mismatches and routes through bridges (no lost funds)
@@ -69,7 +64,7 @@ AegisForge/
 - [ ] AI assistant for zero-knowledge users
 - [ ] Self-hosted model infrastructure — no third-party API key reselling
 - [ ] Stock market integration (phase 2)
-- [ ] Background AI agents for specialized tasks (trading, security, research)
+- [ ] Background AI agents for specialized tasks (trading, research, monitoring)
 
 ## Philosophy
 

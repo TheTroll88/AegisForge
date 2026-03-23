@@ -1,9 +1,6 @@
 """
 Standalone Aerodrome airdrop/points farmer for daily tiny swaps.
 
-This module is intentionally isolated from the LITCOIN miner codebase.
-Only shared external dependency by design is the RPC endpoint.
-
 Required modular functions implemented:
 - balance_check()
 - approve()
@@ -19,6 +16,36 @@ Live/testnet flip guidance:
 - Set RPC_URL to Base Sepolia: https://sepolia.base.org
 - Set PRIVATE_KEY to the funded wallet key
 - Keep DEDICATED_WALLET as the receiver
+
+Required env vars (all must be set for live mode):
+    PRIVATE_KEY           - Wallet private key (hex, with or without 0x prefix)
+    DEDICATED_WALLET      - Receiver address for swapped tokens
+    ROUTER_ADDRESS        - DEX router contract address
+    USDC_ADDRESS          - USDC token contract on target chain
+    TARGET_TOKEN_ADDRESS  - Token to swap into
+
+Optional env vars:
+    RPC_URL          - Chain RPC (default: Anvil localhost)
+    DRY_RUN          - "true" to simulate only (default: true)
+    GAS_PRICE_GWEI   - Manual gas price; omit for auto
+    ROUTE_STABLE     - "true" if stable pair (default: false)
+    ROUTE_FACTORY    - Factory address override
+
+Troubleshooting:
+    "Connection refused" on startup
+        → Anvil isn't running. Start it with `anvil` or change RPC_URL to a real endpoint.
+
+    Transaction reverts silently after ~20 minutes
+        → The master deadline is 1200 seconds. If you're debugging and pausing,
+          the tx expires. Restart the script for a fresh deadline.
+
+    Swap fails with slippage error
+        → Default slippage is 1%. For volatile tokens, set a wider tolerance
+          in the Config dataclass or adjust min_amount_out logic.
+
+    "Approval" transaction sent every time
+        → First run approves max uint256 for the router. After that, approvals
+          are skipped. If you change ROUTER_ADDRESS, a new approval is needed.
 """
 
 import json

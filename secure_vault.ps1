@@ -1,3 +1,51 @@
+<#
+.SYNOPSIS
+    Secure local credential vault using Windows DPAPI encryption.
+
+.DESCRIPTION
+    Stores secrets encrypted with the current Windows user's DPAPI key.
+    Each secret is a separate .sec file inside a .secure_vault/ folder
+    with ACLs locked to the current user + SYSTEM only.
+
+    This is for LOCAL DEV use. For production, use a real secret manager
+    (Azure Key Vault, HashiCorp Vault, etc.).
+
+.NOTES
+    IMPORTANT: Secrets are bound to YOUR Windows user account on THIS machine.
+    If you copy .sec files to another machine or user, they CANNOT be decrypted.
+    There is no recovery — if the file is corrupted or moved, the secret is gone.
+
+.EXAMPLE
+    # Store a secret
+    .\secure_vault.ps1 -Action set -Name API_KEY -Value "your-key-here"
+
+    # Store a secret interactively (input hidden)
+    .\secure_vault.ps1 -Action setprompt -Name API_KEY
+
+    # Retrieve a secret
+    .\secure_vault.ps1 -Action get -Name API_KEY
+
+    # Check vault status
+    .\secure_vault.ps1 -Action status
+
+    # Repair file permissions if they got changed
+    .\secure_vault.ps1 -Action doctor -Name API_KEY
+
+.TROUBLESHOOTING
+    "Secret is unreadable / garbled output"
+        → You're on a different user account or machine than when the secret was saved.
+          DPAPI encryption is user+machine-bound. Re-save the secret on this account.
+
+    "ACL hardening skipped" warning
+        → icacls.exe failed. Run: .\secure_vault.ps1 -Action doctor -Name <name>
+          If that still fails, check that you have admin rights or the path isn't read-only.
+
+    "setprompt doesn't show what I typed"
+        → That's by design (secure input). After saving, run -Action get to verify.
+
+    "Value is required" error on set
+        → Pass -Value "your-secret" or use -Action setprompt for interactive entry.
+#>
 param(
     [ValidateSet("set", "setprompt", "get", "status", "doctor")]
     [string]$Action = "status",
@@ -11,6 +59,8 @@ $VaultDir = Join-Path $PSScriptRoot ".secure_vault"
 $SecretFile = Join-Path $VaultDir ("{0}.sec" -f $Name)
 $CurrentUser = "{0}\{1}" -f $env:USERDOMAIN, $env:USERNAME
 
+# ACL grants: (OI) = Object Inherit, (CI) = Container Inherit, F = Full Control
+# This means the current user and SYSTEM get full access; everyone else is denied.
 function Set-CurrentUserOnlyAcl {
     param([Parameter(Mandatory = $true)][string]$Path)
 
