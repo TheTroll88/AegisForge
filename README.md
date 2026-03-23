@@ -2,6 +2,8 @@
 
 An AI-driven, all-in-one financial platform. Trading, mining, farming, security — automated and accessible to everyone regardless of experience level.
 
+**Token**: [AegisSignal (ASIG)](https://aegissignal.io) on Base chain — the community token powering the AegisForge ecosystem.
+
 ## Vision
 
 Most AI trading platforms gatekeep features behind premium tiers and charge people who don't know any better. AegisForge is the opposite: one quality level for everyone, low-cost access, and AI that does the heavy lifting so someone with zero crypto knowledge can participate on equal footing.
@@ -14,24 +16,23 @@ No third-party API key reselling. No rebranding someone else's infrastructure. I
 
 ```
 AegisForge/
-├── airdrop-farmer/            # Aerodrome DEX swap farmer (Base chain)
+├── airdrop-farmer/            # DEX swap farmer (Base chain)
 │   └── farmer.py
 ├── secure_vault.ps1           # Windows DPAPI credential vault
 ├── phaseport/                 # Data migration and continuity layer
-│   ├── PhasePort_Adapter.py   # GUI launcher
+│   ├── PhasePort_Adapter.py   # Module orchestration GUI
 │   ├── activate_member.py     # Module activation CLI
 │   └── memory_logger.py       # State checkpoint and memory tracking
 ├── ocr_pipeline.py            # Screenshot OCR recovery tool
-├── forensic_sweep.py          # Full-drive forensic scanner
+├── forensic_sweep.py          # Full-drive security scanner
 ├── auto_organizer.py          # File sorting daemon with MD5 dedup
 ├── manage_organizer.ps1       # Organizer start/stop/install management
-├── council/                   # AI agent concepts (early-stage, experimental)
-│   ├── members/               # Agent profile configs (JSON)
-│   └── functions/             # Agent activation scripts (Python)
+├── council/                   # AI agent modules (early-stage, experimental)
+│   ├── members/               # Agent role configs (JSON)
+│   └── functions/             # Agent task scripts (Python)
 ├── legacy/                    # Archived earlier iterations (reference only)
-│   ├── aegis_core/            # Original Aegis declarations and protocols
-│   ├── kratos_archive/        # Original Kratos trading bot source
-│   └── bridge_terminal/       # VPS bridge terminal script
+│   ├── aegis_core/            # Founding project docs and declarations
+│   └── trading-engine-v1/     # Original trading bot prototype source
 └── logs/                      # Runtime logs (gitignored)
 ```
 
@@ -39,22 +40,24 @@ AegisForge/
 
 | Component | Status | Description |
 |-----------|--------|-------------|
-| **Airdrop Farmer** | Ready | Aerodrome DEX swaps on Base (DRY_RUN default) |
+| **Airdrop Farmer** | Ready | DEX swaps on Base (DRY_RUN default) |
 | **Secure Vault** | Active | Windows DPAPI encrypted credential storage |
-| **PhasePort** | Ready | Data continuity and migration layer |
-| **Utilities** | Active | OCR pipeline, forensic sweep, file organizer |
+| **Data Continuity** | Ready | Migration layer and state checkpointing |
+| **Utilities** | Active | OCR pipeline, security scanner, file organizer |
+| **AI Agents** | Experimental | Modular task agents — pattern recognition, research, monitoring |
 
 ## Planned Features
 
-- [ ] AI trading bot engine (evolved from Kratos) — same quality for all users, no tier levels
-- [ ] Free paper trading — see real results with fake money before risking anything
+- [ ] AI trading engine — same quality for all users, no tier levels
+- [ ] Free paper trading — see real results with simulated funds before risking anything
 - [ ] Security vulnerability scanner — 24/7 automated detection, sellable standalone to companies
+- [ ] ASIG token integration — faucet rewards, ecosystem participation, on-chain utility
 - [ ] Custom blockchain miners (original, not third-party)
 - [ ] Multi-chain airdrop discovery
 - [ ] AI-driven news, risk analysis, and token security checks
-- [ ] Automated contract auditing (replace manual DexScreener lookups)
+- [ ] Automated contract auditing
 - [ ] AI assistant for zero-knowledge users
-- [ ] Self-hosted API key generation — no OpenAI/third-party key reselling
+- [ ] Self-hosted model infrastructure — no third-party API key reselling
 - [ ] Stock market integration (phase 2)
 - [ ] Background AI agents for specialized tasks (trading, security, research)
 
@@ -71,7 +74,3 @@ If a trading bot hits 65% success rate, every single user gets that 65%. Period.
 ## License
 
 [MIT](LICENSE) — Copyright (c) 2025-2026 Nathaniel Crigger
-
----
-
-**Status**: ✅ Ready to mine (after Bankr wallet + API key configuration)
