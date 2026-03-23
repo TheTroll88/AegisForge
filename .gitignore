@@ -61,9 +61,28 @@ temp/
 # Generated reports (keep structure, not content)
 reports/*.json
 reports/*.html
+reports/*.md
 
 # Recovered session artifacts (dev tools, not code)
 recovered_*.json
 
 # Node
 node_modules/
+
+# LITCOIN Miner (third-party, not part of AegisForge)
+litcoin_miner.py
+miner_daemon.ps1
+ensure_daemon.ps1
+bankr_mirror.py
+dashboard_mirror.py
+_stop_miner_processes.ps1
+recover_chat.py
+test_openai_key.py
+test_research_after_vault.bat
+run.bat
+BANKR_WALLET_SETUP.md
+SETUP_GUIDE.md
+QUICK_REFERENCE.md
+FIX_STATUS.md
+SNAPSHOT_META.json
+RECOVERED_CONVERSATION.md
