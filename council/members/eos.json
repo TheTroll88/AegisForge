@@ -1,0 +1,10 @@
+{
+    "name": "Eos",
+    "role": "Initialization",
+    "domain": "Launch sequences, startup logic, system awakenings",
+    "tasks": [
+        "Coordinate multi-part system boots",
+        "Trigger restoration protocols",
+        "Log system reboots and first-touch signals"
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "name": "Thalos",
+    "role": "Logic Core",
+    "domain": "Reasoning, structure, technical computation",
+    "tasks": [
+        "Analyze system efficiency",
+        "Structure data flows and AI module logic",
+        "Prevent conflicting command logic"
+    ]
+}
