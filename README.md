@@ -23,13 +23,14 @@ AegisForge/
 │   ├── PhasePort_Adapter.py   # Module orchestration GUI
 │   ├── activate_member.py     # Module activation CLI
 │   └── memory_logger.py       # State checkpoint and memory tracking
-├── ocr_pipeline.py            # Screenshot OCR recovery tool
-├── forensic_sweep.py          # Full-drive security scanner
-├── auto_organizer.py          # File sorting daemon with MD5 dedup
-├── manage_organizer.ps1       # Organizer start/stop/install management
 ├── council/                   # AI agent modules (early-stage, experimental)
 │   ├── members/               # Agent role configs (JSON)
 │   └── functions/             # Agent task scripts (Python)
+├── tools/                     # Standalone open-source utilities (MIT)
+│   ├── auto_organizer.py      # File sorting daemon with MD5 dedup
+│   ├── manage_organizer.ps1   # Organizer start/stop/install management
+│   ├── ocr_pipeline.py        # Screenshot OCR recovery tool
+│   └── forensic_sweep.py      # Full-drive forensic scanner
 ├── legacy/                    # Archived earlier iterations (reference only)
 │   ├── aegis_core/            # Founding project docs and declarations
 │   └── trading-engine-v1/     # Original trading bot prototype source
@@ -43,17 +44,23 @@ AegisForge/
 | **Airdrop Farmer** | Ready | DEX swaps on Base (DRY_RUN default) |
 | **Secure Vault** | Active | Windows DPAPI encrypted credential storage |
 | **Data Continuity** | Ready | Migration layer and state checkpointing |
-| **Utilities** | Active | OCR pipeline, security scanner, file organizer |
 | **AI Agents** | Experimental | Modular task agents — pattern recognition, research, monitoring |
+| **Tools** | Active | Standalone utilities — file organizer, OCR pipeline, forensic scanner |
 
 ## Planned Features
 
 - [ ] AI trading engine — same quality for all users, no tier levels
 - [ ] Free paper trading — see real results with simulated funds before risking anything
-- [ ] Security vulnerability scanner — 24/7 automated detection, sellable standalone to companies
+- [ ] **AI penetration testing bot** — autonomous ethical hacker, sellable standalone to companies
+  - Self-learning agent that probes systems from every angle (inside and outside)
+  - Finds vulnerabilities, logs exactly how it got in, reports to the security team
+  - Never exploits, never corrupts — observe, document, report
+  - Thinks freely, adapts approaches, tests what a real attacker would try
 - [ ] ASIG token integration — faucet rewards, ecosystem participation, on-chain utility
 - [ ] **Smart wallet** — multi-chain with automatic bridge detection and gas abstraction
   - Auto-detects chain mismatches and routes through bridges (no lost funds)
+  - Validates destination wallet actually supports the target blockchain before sending
+  - If no bridge exists and the destination can't receive it — transaction blocked, period
   - Gas fees deducted from the token being sent (no separate native token balance needed)
   - One-step sends: "send X tokens to this address" and it just works
   - Account abstraction (ERC-4337) + paymaster for gasless UX
