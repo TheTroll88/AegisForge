@@ -14,24 +14,34 @@ No third-party API key reselling. No rebranding someone else's infrastructure. I
 
 ```
 AegisForge/
+├── engine/                    # AI trading engine (Base chain, Uniswap V3)
+│   ├── core/                  # Config, wallet, DEX, logging, data feeds
+│   ├── strategies/            # 8 trading strategies (RSI, MACD, Bollinger, etc.)
+│   ├── scripts/               # Utilities — allowlist builder, TX monitor, diagnostics
+│   ├── data/                  # Token lists, allowlists, caches
+│   ├── main_fastapi.py        # FastAPI server
+│   └── run_engine.py          # Engine launcher
+├── council/                   # AI agent council (variable agent count)
+│   ├── agents/                # Agent scripts + state configs
+│   ├── memory/                # State checkpointing and memory tracking
+│   └── activate_agent.py      # Agent activation CLI
+├── contracts/                 # Solidity smart contracts
+│   ├── ASIGToken.sol          # ASIG token (1M supply, ERC-20)
+│   └── SignalRegistry.sol     # On-chain signal broadcasting
 ├── airdrop-farmer/            # DEX swap farmer (Base chain)
 │   └── farmer.py
 ├── secure_vault.ps1           # Windows DPAPI credential vault
-├── phaseport/                 # Data migration and continuity layer
-│   ├── PhasePort_Adapter.py   # Module orchestration GUI
-│   ├── activate_member.py     # Module activation CLI
-│   └── memory_logger.py       # State checkpoint and memory tracking
-├── council/                   # AI agent modules (early-stage, experimental)
-│   ├── members/               # Agent role configs (JSON)
-│   └── functions/             # Agent task scripts (Python)
 ├── tools/                     # Standalone open-source utilities (MIT)
 │   ├── auto_organizer.py      # File sorting daemon with MD5 dedup
 │   ├── manage_organizer.ps1   # Organizer start/stop/install management
 │   ├── ocr_pipeline.py        # Screenshot OCR recovery tool
 │   └── forensic_sweep.py      # Full-drive forensic scanner
+├── docs/                      # Setup guides and reference
 ├── legacy/                    # Archived earlier iterations (reference only)
-│   ├── aegis_core/            # Founding project docs and declarations
-│   └── trading-engine-v1/     # Original trading bot prototype source
+│   ├── aegis_core/            # Founding project docs
+│   ├── trading-engine-v1/     # Original trading bot prototype
+│   ├── safety-protocol/       # Early strategy experiments
+│   └── expo-frontend/         # Incomplete mobile app scaffold
 └── logs/                      # Runtime logs (gitignored)
 ```
 
@@ -39,17 +49,18 @@ AegisForge/
 
 | Component | Status | Description |
 |-----------|--------|-------------|
+| **Trading Engine** | Active | 8 strategies, paper/micro/live modes, FastAPI server, Base chain DEX |
+| **AI Council** | Experimental | Modular task agents — pattern recognition, research, monitoring |
+| **Smart Contracts** | Deployed | ASIG token on Base, SignalRegistry for on-chain signals |
 | **Airdrop Farmer** | Ready | DEX swaps on Base (DRY_RUN default) |
 | **Secure Vault** | Active | Windows DPAPI encrypted credential storage |
-| **Data Continuity** | Ready | Migration layer and state checkpointing |
-| **AI Agents** | Experimental | Modular task agents — pattern recognition, research, monitoring |
 | **Tools** | Active | Standalone utilities — file organizer, OCR pipeline, forensic scanner |
 
 ## Planned Features
 
-- [ ] AI trading engine — same quality for all users, no tier levels
-- [ ] Paper trading — see real results with simulated funds before risking anything
-- [ ] ASIG token integration — faucet rewards, ecosystem participation, on-chain utility
+- [x] AI trading engine — 8 strategies, paper/micro/live modes, FastAPI server
+- [x] Paper trading — simulated funds with real market data
+- [x] ASIG token — deployed on Base chain with on-chain signal broadcasting
 - [ ] **Smart wallet** — multi-chain with automatic bridge detection and gas abstraction
   - Auto-detects chain mismatches and routes through bridges (no lost funds)
   - Validates destination wallet actually supports the target blockchain before sending

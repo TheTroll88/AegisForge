@@ -69,6 +69,12 @@ recovered_*.json
 # Node
 node_modules/
 
+# Engine runtime data (rebuilt at runtime)
+engine/data/decimals_cache.json
+
+# PhasePort source (migration complete, not tracked)
+phaseport/
+
 # LITCOIN Miner (third-party, not part of AegisForge)
 litcoin_miner.py
 miner_daemon.ps1
