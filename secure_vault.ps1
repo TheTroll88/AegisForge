@@ -49,7 +49,7 @@
 param(
     [ValidateSet("set", "setprompt", "get", "status", "doctor")]
     [string]$Action = "status",
-    [string]$Name = "BANKR_API_KEY",
+    [string]$Name = "OPENAI_API_KEY",
     [string]$Value = ""
 )
 

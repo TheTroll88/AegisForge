@@ -58,6 +58,12 @@ tmp/
 temp/
 *.bak
 
+# Local dev tools (not part of shipped app)
+bootstrap_session_log.py
+_tmp_*
+engine/core/session_logger.py
+engine/data/whale_tracker.db
+
 # Generated reports (keep structure, not content)
 reports/*.json
 reports/*.html
@@ -75,20 +81,6 @@ engine/data/decimals_cache.json
 # PhasePort source (migration complete, not tracked)
 phaseport/
 
-# LITCOIN Miner (third-party, not part of AegisForge)
-litcoin_miner.py
-miner_daemon.ps1
-ensure_daemon.ps1
-bankr_mirror.py
-dashboard_mirror.py
-_stop_miner_processes.ps1
-recover_chat.py
-test_openai_key.py
-test_research_after_vault.bat
-run.bat
-BANKR_WALLET_SETUP.md
-SETUP_GUIDE.md
-QUICK_REFERENCE.md
-FIX_STATUS.md
-SNAPSHOT_META.json
-RECOVERED_CONVERSATION.md
+# Legacy artifacts (already archived, not tracked)
+legacy/artifacts/
+legacy/council/

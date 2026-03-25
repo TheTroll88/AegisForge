@@ -12,7 +12,7 @@ import requests
 import numpy as np
 
 # === Local Imports ===
-from core.trader import PaperTrader
+from core.paper_trade import PaperTrader
 from core.config import TraderConfig
 # Micro blockchain trader
 try:
@@ -22,6 +22,8 @@ except Exception:
 from core.live_data_feed import LiveDataFeed
 from core.trade_logger import TradeLogger
 from core.logger import setup_logger
+from core.whale_tracker import WhaleTracker
+from core.whale_signal_bridge import WhaleSignalBridge
 
 # === Init ===
 BASE_DIR = Path(__file__).resolve().parent
@@ -45,7 +47,7 @@ else:
 LOG_PATH = BASE_DIR / 'logs' / 'trade_log.json'
 PERFORMANCE_PATH = BASE_DIR / 'logs' / 'performance.json'
 TRADE_HISTORY_CSV = BASE_DIR / 'logs' / 'trade_history.csv'
-STRATEGIES_DIR = BASE_DIR / 'core' / 'strategies'
+STRATEGIES_DIR = BASE_DIR / 'strategies'
 os.makedirs(BASE_DIR / 'logs', exist_ok=True)
 
 # === Strategy Tracker ===
@@ -58,7 +60,7 @@ if STRATEGIES_DIR.exists():
             module_name = file.stem
             class_name = ''.join(part.capitalize() for part in module_name.split('_'))
             try:
-                module = importlib.import_module(f"core.strategies.{module_name}")
+                module = importlib.import_module(f"strategies.{module_name}")
                 # Try exact match first, then search for any class ending with 'Strategy'
                 strategy_class = None
                 if hasattr(module, class_name):
@@ -80,6 +82,10 @@ if STRATEGIES_DIR.exists():
                     logger.error(f"❌ Failed to load strategy from {module_name}: No Strategy class found")
             except Exception as e:
                 logger.error(f"❌ Failed to load strategy {class_name}: {e}")
+
+# === Whale Tracker ===
+whale_tracker = WhaleTracker()
+whale_bridge = WhaleSignalBridge(whale_tracker)
 
 # === Live Symbol Chunker ===
 def chunk_symbols(symbols, size=50):
@@ -245,6 +251,33 @@ async def update_strategy_config(name: str, request: Request):
 
     return {"status": "success", "message": f"{strategy_file.name} updated"}
 
+# === Whale Tracker Endpoints ===
+@app.get("/whales/signals")
+async def get_whale_signals(limit: int = 50):
+    return {"signals": whale_tracker.get_recent_signals(limit)}
+
+@app.get("/whales/movers")
+async def get_whale_movers(limit: int = 20):
+    return {"movers": whale_tracker.get_top_movers(limit)}
+
+@app.get("/whales/address/{address}")
+async def get_whale_transfers(address: str, limit: int = 50):
+    return {"transfers": whale_tracker.get_transfers_for_address(address, limit)}
+
+@app.post("/whales/watch")
+async def add_whale_watch(request: Request):
+    body = await request.json()
+    address = body.get("address")
+    label = body.get("label", "unknown")
+    if not address:
+        raise HTTPException(status_code=400, detail="Address required")
+    whale_tracker.add_watched_whale(address, label)
+    return {"status": "added", "address": address, "label": label}
+
+@app.get("/whales/bridge")
+async def get_whale_bridge_stats():
+    return whale_bridge.get_stats()
+
 # === Background Market Scanner ===
 async def strategy_loop():
     print("[LIVE] AegisForge market loop online...")
@@ -261,18 +294,18 @@ async def strategy_loop():
         live_data = market.get_all()
 
         for data in live_data:
-                for name, strategy in strategies:
+            for name, strategy in strategies:
                 if not strategy_states.get(name):
                     continue
                 try:
                     signal = strategy.evaluate(data)
+                    signal = whale_bridge.adjust_signal(signal, data, strategy_name=name)
                     action = signal.get("action")
                     if action in ["buy", "sell"]:
-                            # Execute using the configured trader (paper or micro/live)
-                            try:
-                                trader.execute(signal, data, strategy_name=name)
-                            except Exception as e:
-                                logger.error(f"⚠️ Trader execution failed: {e}")
+                        try:
+                            trader.execute(signal, data, strategy_name=name)
+                        except Exception as e:
+                            logger.error(f"⚠️ Trader execution failed: {e}")
                 except Exception as e:
                     logger.warning(f"⚠️ Strategy {name} failed: {e}")
 
@@ -284,5 +317,3 @@ async def strategy_loop():
             logger.error(f"⚠️ Position check failed: {e}")
 
         await asyncio.sleep(3)
-
-np

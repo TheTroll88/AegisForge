@@ -5,7 +5,8 @@ from datetime import datetime
 
 class TradeLogger:
     def __init__(self):
-        base_path = r"C:\Users\natha\Dev\The_Birth_of_a_Pantheon_PhasePort\The_Birth_of_a_Pantheon_PhasePort\kratos_core\logs"
+        base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "logs")
+        base_path = os.path.normpath(base_path)
 
         self.csv_file = os.path.join(base_path, "trade_history.csv")
         self.json_file = os.path.join(base_path, "trade_log.json")

@@ -55,6 +55,7 @@ AegisForge/
 | **Airdrop Farmer** | Ready | DEX swaps on Base (DRY_RUN default) |
 | **Secure Vault** | Active | Windows DPAPI encrypted credential storage |
 | **Tools** | Active | Standalone utilities — file organizer, OCR pipeline, forensic scanner |
+| **Whale Tracker** | Active | Multi-chain whale movement monitor with coordinated movement detection |
 
 ## Planned Features
 
@@ -71,6 +72,7 @@ AegisForge/
 - [ ] Custom blockchain miners (original, not third-party)
 - [ ] Multi-chain airdrop discovery
 - [ ] AI-driven news, risk analysis, and token security checks
+- [x] **Whale tracker** — multi-chain large transfer monitoring (Ethereum, Base, BSC)
 - [ ] Automated contract auditing
 - [ ] AI assistant for zero-knowledge users
 - [ ] Self-hosted model infrastructure — no third-party API key reselling

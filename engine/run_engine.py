@@ -5,13 +5,13 @@ from core.paper_trade import PaperTrader
 from core.live_data_feed import LiveDataFeed
 from core.trade_logger import TradeLogger
 
-from core.strategies.rsi_strategy import RSIStrategy
-from core.strategies.momentum_strategy import MomentumStrategy
-from core.strategies.macd_strategy import MACDStrategy
-from core.strategies.bollinger_strategy import BollingerStrategy
-from core.strategies.breakout_strategy import BreakoutStrategy
-from core.strategies.volume_spike_strategy import VolumeSpikeStrategy
-from core.strategies.aegis_fusion_strategy import AegisFusionStrategy
+from strategies.rsi_strategy import RSIStrategy
+from strategies.momentum_strategy import MomentumStrategy
+from strategies.macd_strategy import MACDStrategy
+from strategies.bollinger_strategy import BollingerStrategy
+from strategies.breakout_strategy import BreakoutStrategy
+from strategies.volume_spike_strategy import VolumeSpikeStrategy
+from strategies.aegis_fusion_strategy import AegisFusionStrategy
 
 
 def main():

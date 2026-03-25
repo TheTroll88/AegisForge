@@ -43,8 +43,8 @@ class WalletManager:
         self.logger.info(f"✅ Connected to chain ID: {self.chain_id}")
 
         # Tx receipt logging (optional but enabled by default)
-        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-        default_receipt_log = os.path.join(project_root, "kratos_core", "logs", "tx_receipts.json")
+        engine_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        default_receipt_log = os.path.join(engine_dir, "logs", "tx_receipts.json")
         self.tx_receipt_log = os.getenv("TX_RECEIPT_LOG_FILE", default_receipt_log)
         try:
             os.makedirs(os.path.dirname(self.tx_receipt_log), exist_ok=True)
