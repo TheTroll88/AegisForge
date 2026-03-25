@@ -1,0 +1,14 @@
+{
+  "updated": "2026-03-25T06:55:31.204399+00:00",
+  "source_report": "backtest_20260325_060102.json",
+  "weights": {
+    "aegis_fusion": 0.1994,
+    "breakout": 0.2194,
+    "macd": 0.1555,
+    "momentum": 0.2282,
+    "rsi_trend": 0.0494,
+    "bollinger": 0.0494,
+    "rsi": 0.0494,
+    "volume_spike": 0.0494
+  }
+}

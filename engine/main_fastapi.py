@@ -24,6 +24,7 @@ from core.trade_logger import TradeLogger
 from core.logger import setup_logger
 from core.whale_tracker import WhaleTracker
 from core.whale_signal_bridge import WhaleSignalBridge
+from core.asig_bridge import ASIGBridge
 
 # === Init ===
 BASE_DIR = Path(__file__).resolve().parent
@@ -86,6 +87,15 @@ if STRATEGIES_DIR.exists():
 # === Whale Tracker ===
 whale_tracker = WhaleTracker()
 whale_bridge = WhaleSignalBridge(whale_tracker)
+
+# === ASIG Bridge (Base chain) ===
+try:
+    asig_bridge = ASIGBridge()
+except Exception as _asig_err:
+    logger.warning(f"⚠️ ASIGBridge init failed: {_asig_err}")
+    asig_bridge = None
+
+BROADCAST_SIGNALS = os.getenv("BROADCAST_SIGNALS", "").lower() == "true"
 
 # === Live Symbol Chunker ===
 def chunk_symbols(symbols, size=50):
@@ -278,6 +288,68 @@ async def add_whale_watch(request: Request):
 async def get_whale_bridge_stats():
     return whale_bridge.get_stats()
 
+# === ASIG Token & Signal Endpoints ===
+@app.get("/asig/balance")
+async def get_asig_balance(address: str = None):
+    if not asig_bridge:
+        raise HTTPException(status_code=503, detail="ASIG bridge unavailable")
+    bal = asig_bridge.get_asig_balance(address)
+    if bal is None:
+        raise HTTPException(status_code=500, detail="Failed to read balance")
+    return {"balance": bal, "token": "ASIG", "chain": "base"}
+
+@app.get("/asig/supply")
+async def get_asig_supply():
+    if not asig_bridge:
+        raise HTTPException(status_code=503, detail="ASIG bridge unavailable")
+    supply = asig_bridge.get_total_supply()
+    if supply is None:
+        raise HTTPException(status_code=500, detail="Failed to read supply")
+    return {"total_supply": supply, "token": "ASIG", "chain": "base"}
+
+@app.get("/asig/signals")
+async def get_chain_signals(count: int = 20):
+    if not asig_bridge:
+        raise HTTPException(status_code=503, detail="ASIG bridge unavailable")
+    sigs = asig_bridge.get_recent_signals(count)
+    return {"signals": sigs, "count": len(sigs)}
+
+@app.post("/asig/broadcast")
+async def broadcast_signal_endpoint(request: Request):
+    if not asig_bridge:
+        raise HTTPException(status_code=503, detail="ASIG bridge unavailable")
+    body = await request.json()
+    command = body.get("command")
+    if not command:
+        raise HTTPException(status_code=400, detail="'command' field required")
+    tx_hash = asig_bridge.broadcast_signal(command)
+    if tx_hash is None:
+        raise HTTPException(status_code=500, detail="Broadcast failed (no key or chain error)")
+    return {"tx_hash": tx_hash, "command": command}
+
+# === Auto-Tune Endpoints ===
+@app.post("/auto-tune")
+async def run_auto_tune():
+    from auto_tune import compute_weights, find_latest_backtest, load_current_weights, save_weights
+    report_path = find_latest_backtest()
+    if not report_path:
+        raise HTTPException(status_code=404, detail="No backtest reports found")
+    with open(report_path, "r") as f:
+        report = json.load(f)
+    new_weights = compute_weights(report)
+    if not new_weights:
+        raise HTTPException(status_code=400, detail="No strategies in report")
+    save_weights(new_weights, report_path.name)
+    return {"source": report_path.name, "weights": new_weights}
+
+@app.get("/strategy-weights")
+async def get_strategy_weights():
+    weights_path = BASE_DIR / "data" / "strategy_weights.json"
+    if not weights_path.exists():
+        raise HTTPException(status_code=404, detail="No weights file — run auto-tune first")
+    with open(weights_path, "r") as f:
+        return json.load(f)
+
 # === Background Market Scanner ===
 async def strategy_loop():
     print("[LIVE] AegisForge market loop online...")
@@ -304,6 +376,15 @@ async def strategy_loop():
                     if action in ["buy", "sell"]:
                         try:
                             trader.execute(signal, data, strategy_name=name)
+                            # Optionally broadcast signal on-chain
+                            if BROADCAST_SIGNALS and asig_bridge:
+                                sym = data.get("symbol", "?")
+                                conf = signal.get("confidence", "")
+                                cmd = f"{action.upper()}:{sym}:{name}:{conf}"
+                                try:
+                                    asig_bridge.broadcast_signal(cmd)
+                                except Exception:
+                                    pass  # fire-and-forget
                         except Exception as e:
                             logger.error(f"⚠️ Trader execution failed: {e}")
                 except Exception as e:

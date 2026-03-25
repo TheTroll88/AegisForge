@@ -1,0 +1,326 @@
+/* ===== APP LAYOUT ===== */
+.app {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+}
+
+/* ===== HEADER ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #1e293b;
+  margin-bottom: 20px;
+}
+
+.header-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.header-logo {
+  font-size: 28px;
+  font-weight: 700;
+  color: #00ffc8;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.header-tagline {
+  font-size: 13px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.status-dot.online {
+  background: #00ffc8;
+  box-shadow: 0 0 8px rgba(0, 255, 200, 0.5);
+}
+
+.status-dot.offline {
+  background: #ff4d4d;
+  box-shadow: 0 0 8px rgba(255, 77, 77, 0.5);
+}
+
+.status-text {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* ===== STATS BAR ===== */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #6b7280;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #e0e0e0;
+}
+
+.stat-value.positive { color: #00ffc8; }
+.stat-value.negative { color: #ff4d4d; }
+
+.stat-sub {
+  font-size: 16px;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+/* ===== MAIN GRID ===== */
+.main-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #00ffc8;
+  margin: 0 0 12px;
+}
+
+/* ===== STRATEGY PANEL ===== */
+.strategy-panel {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.strategy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.strategy-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: #0d1117;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+}
+
+.strategy-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.strategy-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e0e0e0;
+  text-transform: capitalize;
+}
+
+.strategy-badge {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.strategy-badge.active {
+  color: #00ffc8;
+  background: rgba(0, 255, 200, 0.1);
+}
+
+.strategy-badge.inactive {
+  color: #6b7280;
+  background: rgba(107, 114, 128, 0.1);
+}
+
+/* ===== TOGGLE SWITCH ===== */
+.toggle-btn {
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggle-btn.on {
+  background: #00ffc8;
+}
+
+.toggle-btn.off {
+  background: #374151;
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #0a0f1a;
+  transition: left 0.2s;
+}
+
+.toggle-btn.on .toggle-knob {
+  left: 21px;
+}
+
+.toggle-btn.off .toggle-knob {
+  left: 3px;
+}
+
+/* ===== PERFORMANCE CHART ===== */
+.performance-chart {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.chart-empty {
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* ===== WHALE PANEL ===== */
+.whale-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.whale-section {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.whale-empty {
+  padding: 24px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.whale-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.whale-table th {
+  text-align: left;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+  padding: 6px 8px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.whale-table td {
+  padding: 8px;
+  border-bottom: 1px solid #0d1117;
+  color: #d1d5db;
+}
+
+/* ===== TRADE LOG ===== */
+.trade-log {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.trade-empty {
+  padding: 24px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.trade-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.trade-table th {
+  text-align: left;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+  padding: 8px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.trade-table td {
+  padding: 8px;
+  border-bottom: 1px solid #0d1117;
+  color: #d1d5db;
+}
+
+.row-buy {
+  background: rgba(0, 255, 200, 0.03);
+}
+
+.row-sell {
+  background: rgba(255, 77, 77, 0.03);
+}
+
+.buy-text { color: #00ffc8; }
+.sell-text { color: #ff4d4d; }
+.positive { color: #00ffc8; }
+.negative { color: #ff4d4d; }
