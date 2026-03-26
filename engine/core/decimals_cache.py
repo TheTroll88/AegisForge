@@ -10,7 +10,7 @@ class DecimalsCache:
         self.logger = logger or logging.getLogger(__name__)
         if cache_file is None:
             project_root = pathlib.Path(__file__).resolve().parents[2]
-            default_path = project_root / "kratos_core" / "data" / "decimals_cache.json"
+            default_path = project_root / "engine" / "data" / "decimals_cache.json"
             cache_file = os.getenv("DECIMALS_CACHE_FILE", str(default_path))
         self.cache_file = cache_file
         self._cache = {}

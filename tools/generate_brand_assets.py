@@ -18,8 +18,8 @@ AEGIS_MID = (12, 18, 28)         # Slightly lighter dark
 AEGIS_DIM = (0, 80, 64)          # Dimmed cyan for subtle elements
 AEGIS_GLOW = (0, 200, 160)       # Softer glow variant
 
-OUTPUT_DIR = Path(r"C:\Users\natha\OneDrive\Desktop\AegisForge\assets\brand")
-NOISE_ASSET = Path(r"C:\Users\natha\OneDrive\GitHub\Aegis-safety-protocol-\assets\signal\NoiseAsset_256x256_PNG.png")
+OUTPUT_DIR = Path(os.environ.get("BRAND_OUTPUT_DIR", str(Path(__file__).resolve().parent.parent / "assets" / "brand")))
+NOISE_ASSET = Path(os.environ.get("NOISE_ASSET_PATH", str(Path(__file__).resolve().parent.parent / "assets" / "NoiseAsset_256x256_PNG.png")))
 
 # Screen resolution
 WALL_W, WALL_H = 1920, 1080  # Generate at 1080p regardless of current display

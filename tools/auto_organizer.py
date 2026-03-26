@@ -2,10 +2,10 @@
 AUTO-ORGANIZER DAEMON
 =====================
 Watches a Dropbox intake folder and automatically sorts files
-into a clean category-based directory structure on D:\DataVault\Organized.
+into a clean category-based directory structure.
 
 Features:
-- Watches D:\DataVault\Dropbox for new files
+- Watches ORGANIZER_DROPBOX_DIR for new files (default: ~/DataVault/Dropbox)
 - Routes files to categories based on extension and content
 - Deduplicates by MD5 hash (skips if already exists)
 - Logs all actions
@@ -24,6 +24,11 @@ Categories:
   Archives/    - .zip, .tar, .gz, .7z, .rar, .bak
   Media/       - .mp3, .mp4, .wav, .avi, .mkv, .mov
   Other/       - anything else
+
+Configure directories via environment variables:
+  ORGANIZER_DROPBOX_DIR  - intake folder (default: ~/DataVault/Dropbox)
+  ORGANIZER_OUTPUT_DIR   - organized output (default: ~/DataVault/Organized)
+  ORGANIZER_LOG_DIR      - log directory (default: ~/DataVault/Logs)
 """
 
 import os
@@ -40,10 +45,10 @@ from datetime import datetime
 # CONFIG
 # ============================================================
 
-DROPBOX_DIR = Path(r"D:\DataVault\Dropbox")
-ORGANIZED_DIR = Path(r"D:\DataVault\Organized")
-LOG_DIR = Path(r"D:\DataVault\Logs")
-PID_FILE = Path(os.environ.get("TEMP", r"C:\Users\natha\AppData\Local\Temp")) / "auto_organizer.pid"
+DROPBOX_DIR = Path(os.environ.get("ORGANIZER_DROPBOX_DIR", str(Path.home() / "DataVault" / "Dropbox")))
+ORGANIZED_DIR = Path(os.environ.get("ORGANIZER_OUTPUT_DIR", str(Path.home() / "DataVault" / "Organized")))
+LOG_DIR = Path(os.environ.get("ORGANIZER_LOG_DIR", str(Path.home() / "DataVault" / "Logs")))
+PID_FILE = Path(os.environ.get("TEMP", str(Path.home() / "AppData" / "Local" / "Temp"))) / "auto_organizer.pid"
 POLL_INTERVAL = 5  # seconds between checks
 
 # Category routing by extension

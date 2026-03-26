@@ -12,10 +12,13 @@ Scans all data on C: and D: drives for:
   - Duplicate files (by hash)
 
 Outputs:
-  - D:\DataVault\Organized\forensic_master_report.json  (full structured data)
-  - D:\DataVault\Organized\forensic_master_report.md    (human-readable)
-  - D:\DataVault\Organized\SENSITIVE_ITEMS.json         (vault candidates)
-  - D:\DataVault\Organized\DUPLICATES.json              (exact dupes to clean)
+  - <FORENSIC_OUTPUT_DIR>/forensic_master_report.json  (full structured data)
+  - <FORENSIC_OUTPUT_DIR>/forensic_master_report.md    (human-readable)
+  - <FORENSIC_OUTPUT_DIR>/SENSITIVE_ITEMS.json         (vault candidates)
+  - <FORENSIC_OUTPUT_DIR>/DUPLICATES.json              (exact dupes to clean)
+
+Configure output directory with the FORENSIC_OUTPUT_DIR environment variable.
+Configure scan targets with the FORENSIC_SCAN_ROOTS environment variable (comma-separated paths, required).
 """
 
 import os
@@ -31,21 +34,16 @@ from collections import defaultdict
 # CONFIGURATION
 # ============================================================
 
-OUTPUT_DIR = Path(r"D:\DataVault\Organized")
+OUTPUT_DIR = Path(os.getenv("FORENSIC_OUTPUT_DIR", str(Path.home() / "forensic_output")))
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 TIMESTAMP = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-# Scan roots — everything that matters
-SCAN_ROOTS = [
-    r"C:\Users\natha",
-    r"D:\DataVault",
-    r"D:\KeePassXC_Review",
-    r"D:\root",
-    r"D:\The_Birth_of_a_Pantheon",
-    r"D:\The_Birth_of_a_Pantheon_PhasePort",
-    r"D:\FileHistory",
-]
+# Scan roots — configure via FORENSIC_SCAN_ROOTS env var (comma-separated paths).
+# No default is provided to avoid accidentally scanning sensitive directories.
+# Example: FORENSIC_SCAN_ROOTS=/home/user/projects,/home/user/Documents
+_default_roots_env = os.getenv("FORENSIC_SCAN_ROOTS", "")
+SCAN_ROOTS = [p.strip() for p in _default_roots_env.split(",") if p.strip()]
 
 # Skip these — game installs, caches, node_modules, .git internals
 SKIP_DIRS = {
@@ -432,6 +430,12 @@ class ForensicScanner:
 # ============================================================
 
 def main():
+    if not SCAN_ROOTS:
+        print("ERROR: No scan roots configured.")
+        print("Set the FORENSIC_SCAN_ROOTS environment variable to a comma-separated list of paths.")
+        print("Example: FORENSIC_SCAN_ROOTS=/home/user/projects,/home/user/Documents")
+        sys.exit(1)
+
     print("=" * 60)
     print("FULL FORENSIC SWEEP — Starting")
     print(f"Output: {OUTPUT_DIR}")
@@ -488,7 +492,7 @@ def main():
         shutil.copy2(src, dest)
     
     print(f"\n{'='*60}")
-    print("DONE. Reports in D:\\DataVault\\Organized\\")
+    print(f"DONE. Reports in {OUTPUT_DIR}")
     print(f"{'='*60}")
 
 

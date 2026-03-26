@@ -6,7 +6,7 @@ Standalone open-source utilities. These are personal productivity tools, **not p
 
 File sorting daemon. Watches a dropbox folder and auto-sorts files into 12 categories by extension, with MD5 dedup (duplicates are deleted, not moved).
 
-**Setup:** Paths default to `D:\DataVault\Dropbox` (input) and `D:\DataVault\Organized` (output). Edit the constants at the top if your layout differs.
+**Setup:** Paths default to `~/DataVault/Dropbox` (input) and `~/DataVault/Organized` (output). Override with `ORGANIZER_DROPBOX_DIR` and `ORGANIZER_OUTPUT_DIR` environment variables.
 
 **Troubleshooting:**
 

@@ -1,7 +1,7 @@
 """Aggregate common token addresses for Base via CoinGecko and verify on-chain.
 
-Usage: run from `kratos_core`:
-  python scripts/aggregate_and_vet.py
+Usage: run from AegisForge root:
+  python engine/scripts/aggregate_and_vet.py
 
 This script will:
 - Query CoinGecko for common symbols and attempt to find a 'base' platform address.

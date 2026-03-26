@@ -182,7 +182,7 @@ UNISWAP_QUOTER_ABI = [
 ]
 
 class DEXTrader:
-    """Trade on Uniswap V3 (Polygon mainnet)"""
+    """Trade on Uniswap V3 (Base mainnet)"""
     
     def __init__(self, wallet_manager, logger=None):
         self.logger = logger or logging.getLogger(__name__)
