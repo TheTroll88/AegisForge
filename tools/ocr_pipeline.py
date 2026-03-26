@@ -2,12 +2,18 @@
 """
 Screenshot OCR Pipeline
 =======================
-Scans images in D:\\DataVault\\Screenshots, performs OCR via Tesseract,
+Scans images in a screenshots directory, performs OCR via Tesseract,
 extracts file paths / project structures, and writes structured outputs
-to D:\\DataVault\\OCR_Output and D:\\DataVault\\Logs.
+to an OCR output directory and logs directory.
 
 Usage:
     python ocr_pipeline.py [--screenshots DIR] [--output DIR] [--logs DIR]
+
+Configure default directories via environment variables:
+  OCR_SCREENSHOTS_DIR  - input screenshots (default: ~/DataVault/Screenshots)
+  OCR_OUTPUT_DIR       - OCR output (default: ~/DataVault/OCR_Output)
+  OCR_LOGS_DIR         - logs directory (default: ~/DataVault/Logs)
+  TESSERACT_CMD        - path to tesseract executable
 """
 
 import os
@@ -25,11 +31,11 @@ from collections import Counter, defaultdict
 # ──────────────────────────────────────────────────────────────────────────────
 # CONFIGURATION
 # ──────────────────────────────────────────────────────────────────────────────
-TESSERACT_CMD = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+TESSERACT_CMD = os.environ.get("TESSERACT_CMD", r"C:\Program Files\Tesseract-OCR\tesseract.exe")
 
-DEFAULT_SCREENSHOTS = Path(r"D:\DataVault\Screenshots")
-DEFAULT_OCR_OUTPUT  = Path(r"D:\DataVault\OCR_Output")
-DEFAULT_LOGS        = Path(r"D:\DataVault\Logs")
+DEFAULT_SCREENSHOTS = Path(os.environ.get("OCR_SCREENSHOTS_DIR", str(Path.home() / "DataVault" / "Screenshots")))
+DEFAULT_OCR_OUTPUT  = Path(os.environ.get("OCR_OUTPUT_DIR", str(Path.home() / "DataVault" / "OCR_Output")))
+DEFAULT_LOGS        = Path(os.environ.get("OCR_LOGS_DIR", str(Path.home() / "DataVault" / "Logs")))
 
 SUPPORTED_EXTS      = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".tiff", ".tif"}
 PROGRESS_INTERVAL   = 100   # log a status line every N files

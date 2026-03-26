@@ -1,8 +1,8 @@
 """Simple helper to print resolved token addresses using DEXTrader.
 
-Run from the `kratos_core` folder:
+Run from AegisForge root:
 
-python scripts/print_resolved_tokens.py
+python engine/scripts/print_resolved_tokens.py
 """
 import sys
 import pathlib

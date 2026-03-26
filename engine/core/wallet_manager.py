@@ -25,8 +25,8 @@ class WalletManager:
         self.decimals_cache = DecimalsCache(logger=self.logger)
         
         # Network Configuration
-        self.rpc_url = os.getenv("METAMASK_RPC_URL", "https://polygon-rpc.com")
-        self.chain_id = int(os.getenv("METAMASK_CHAIN_ID", 137))  # Polygon mainnet
+        self.rpc_url = os.getenv("METAMASK_RPC_URL", "https://mainnet.base.org")
+        self.chain_id = int(os.getenv("METAMASK_CHAIN_ID", 8453))  # Base mainnet
         self.private_key = os.getenv("METAMASK_PRIVATE_KEY")
         self.wallet_address = os.getenv("METAMASK_WALLET_ADDRESS")
         

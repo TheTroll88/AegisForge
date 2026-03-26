@@ -1,133 +1,125 @@
-# kratos_core/BLOCKCHAIN_SETUP.md
+# 🔗 Blockchain & Wallet Setup Guide
 
-# 🔗 Blockchain & MetaMask Setup Guide
+## Overview
 
-## Quick Start: Micro Trading ($0.01 - $100 per trade)
-
-This guide walks you through connecting your MetaMask wallet and setting up micro-trading on Polygon.
+AegisForge trades on **Base** (an Ethereum L2 by Coinbase) using Uniswap V3 for on-chain swaps.
+This guide covers wallet setup, funding, and connecting to the engine.
 
 ---
 
-## Step 1: Get Your MetaMask Private Key
+## Step 1: Get Your Wallet Private Key
+
+### MetaMask
 
 1. Open MetaMask
-2. Click: **Settings** → **Security & Privacy**
-3. Click: **Show Private Key**
-4. Enter your password and copy your **PRIVATE KEY**
-   - ⚠️ **NEVER share this key with anyone!**
+2. Click: **Settings → Security & Privacy**
+3. Click: **Reveal Secret Recovery Phrase** or **Export Private Key**
+4. Enter your password and copy your **private key**
+   - ⚠️ **NEVER share this key with anyone. NEVER commit it to git.**
+
+### Generate a New Wallet
+
+```python
+from eth_account import Account
+acct = Account.create()
+print("Address:", acct.address)
+print("Key:", acct.key.hex())
+```
 
 ---
 
-## Step 2: Configure `.env` File
+## Step 2: Configure `.env`
 
-Edit `.env` in the root folder (`The_Birth_of_a_Pantheon_PhasePort/`):
+Edit `.env` in the project root:
 
 ```env
-# MetaMask Wallet
-METAMASK_PRIVATE_KEY=123abc456def...  # Your 64-character hex key
-METAMASK_WALLET_ADDRESS=0x123...     # Your wallet address (0x...)
+# Wallet
+METAMASK_PRIVATE_KEY=0xYOUR_64_CHAR_HEX_KEY
+METAMASK_WALLET_ADDRESS=0xYOUR_WALLET_ADDRESS
 
-# Network (Polygon = cheapest gas)
-METAMASK_RPC_URL=https://polygon-rpc.com
-METAMASK_CHAIN_ID=137
+# Base Mainnet
+METAMASK_RPC_URL=https://mainnet.base.org
+METAMASK_CHAIN_ID=8453
 
 # Micro Trading Settings
-MICRO_TRADING_ENABLED=True
-MICRO_TRADING_BASE_AMOUNT=1.0       # Start with $1 per trade
-MICRO_TRADING_SCALE_FACTOR=0.01     # 1% of balance max
-MICRO_MAX_POSITION_SIZE=100.0       # Never trade more than $100
+MICRO_MODE=true
+```
 
-# Safety Settings
-MAX_SLIPPAGE_PERCENT=0.5            # Max 0.5% slippage
-MIN_PROFIT_THRESHOLD=0.01           # Trade if profit > $0.01
-GAS_PRICE_MULTIPLIER=1.2            # Speedup multiplier
+For **testnet** (safe for experimenting with no real funds):
+
+```env
+METAMASK_RPC_URL=https://sepolia.base.org
+METAMASK_CHAIN_ID=84532
 ```
 
 ---
 
 ## Step 3: Fund Your Wallet
 
-You need **Polygon MATIC** for gas fees + **USDC** for trading:
+You need **ETH on Base** for gas fees and **USDC on Base** for trading.
 
-### Via Bridge (Ethereum → Polygon):
-1. Go to https://bridge.polygon.technology
+### Via Bridge (Ethereum → Base)
+
+1. Go to https://bridge.base.org
 2. Connect MetaMask
-3. Send USDC/ETH from Ethereum to Polygon
-4. Minimum: **$5-10 for initial testing**
+3. Bridge ETH from Ethereum to Base mainnet
+4. Minimum recommended: **$10–20 for initial testing**
 
-### Via Exchange (Direct to Polygon):
-- Binance, Kraken, Kucoin support Polygon
-- Withdraw USDC or USDT directly to Polygon network
+### Via Coinbase (Direct to Base)
+
+- Buy or withdraw ETH/USDC directly to the Base network from Coinbase
+
+### Base Sepolia Testnet (No real funds)
+
+- Get test ETH: https://www.coinbase.com/faucets/base-ethereum-goerli-faucet
+- Use `METAMASK_CHAIN_ID=84532` and `METAMASK_RPC_URL=https://sepolia.base.org`
 
 ---
 
 ## Step 4: Install Dependencies
 
 ```bash
-cd The_Birth_of_a_Pantheon_PhasePort
 pip install -r requirements.txt
 ```
 
-This installs:
-- `web3.py` - Blockchain interactions
-- `eth-account` - Wallet/signing
+Key packages: `web3`, `eth-account`, `python-dotenv`
 
 ---
 
 ## Step 5: Test Your Connection
 
 ```bash
+cd engine
 python -c "
-from kratos_core.core.wallet_manager import WalletManager
+from core.wallet_manager import WalletManager
 wallet = WalletManager()
 balance = wallet.get_balance()
-print(f'✅ Connected! MATIC Balance: {balance}')
+print(f'✅ Connected! ETH Balance: {balance}')
 "
 ```
 
 Expected output:
 ```
-✅ Connected to chain ID: 137
+✅ Connected to chain ID: 8453
 ✅ Loaded account: 0x123...
-💰 MATIC Balance: 1.234567
+💰 Native Balance: 0.123456
 ```
 
 ---
 
 ## Step 6: Start Micro Trading
 
-### Option A: Update FastAPI Server
-
-Modify `kratos_core/main_fastapi.py`:
-
-```python
-from core.micro_trader import MicroTrader
-
-# Replace PaperTrader with MicroTrader
-trader = MicroTrader(logger=logger, trade_logger=trade_logger)
-```
-
-Run:
 ```bash
-cd kratos_core
-python main_fastapi.py
+cd engine
+python test_micro_trader.py
 ```
 
-### Option B: Test Directly
-
-```python
-from core.wallet_manager import WalletManager
-from core.micro_trader import MicroTrader
-
-# Initialize
-trader = MicroTrader()
-
-# Execute a trade signal
-signal = {"action": "buy"}
-market_data = {"symbol": "USDC", "price": 1.0}
-trade = trader.execute(signal, market_data, strategy_name="test")
-
-print(trade)
+Expected output:
+```
+✅ MicroTrader initialized
+💰 ETH Balance: 0.05
+✅ Buy executed: {...}
+✅ Sell executed: {...}
 ```
 
 ---
@@ -137,51 +129,49 @@ print(trade)
 ```
 Signal Generated
     ↓
-Calculate Position Size ($1-$100)
+Calculate Position Size ($0.01 – $100)
     ↓
-Build Uniswap Swap Transaction
+Build Uniswap V3 Swap Transaction
     ↓
-Sign with MetaMask Private Key
+Sign with Wallet Private Key
     ↓
-Send to Polygon Network
+Send to Base Network
     ↓
-Wait for Confirmation (5-30 seconds)
+Wait for Confirmation (~2 seconds on Base)
     ↓
-Log Trade in trade_log.json
+Log Trade
     ↓
-Track Profit/Loss in Real-Time
+Track Profit/Loss
 ```
 
 ---
 
-## Cost Breakdown (Polygon)
+## Cost Breakdown (Base)
 
-| Operation | Gas | Cost |
-|-----------|-----|------|
-| Token Swap | ~200k | $0.01-0.05 |
-| Token Approval | ~50k | $0.002-0.01 |
-| **Total per trade** | | **~$0.02-0.10** |
+| Operation | Gas | Approx Cost |
+|-----------|-----|-------------|
+| Token Swap | ~200k gas | $0.001–0.01 |
+| Token Approval | ~50k gas | $0.0002–0.003 |
+| **Total per trade** | | **~$0.001–0.01** |
 
-💰 **Result**: With $1 trades, you keep $0.90+ profit on wins, lose ~$1.01 on losses
+Base gas fees are significantly cheaper than Ethereum mainnet.
 
 ---
 
 ## Safety Checklist
 
-✅ Test with $1 trades first
-✅ Verify all TX hashes in BlockScout
-✅ Keep private key in `.env` (never commit to git)
-✅ Start with `MICRO_TRADING_ENABLED=True`
-✅ Monitor gas prices before big trades
-✅ Use `MAX_SLIPPAGE_PERCENT=0.5` minimum
+✅ Test with $1 trades first  
+✅ Start with `MICRO_MODE=true` in paper mode first  
+✅ Keep private key in `.env` — never commit to git  
+✅ Verify all TX hashes on BaseScan  
+✅ Monitor gas prices before large trades  
 
 ---
 
-## Verify Trades
+## Verify Trades on BaseScan
 
 View all your transactions:
-- **Polygon BlockScout**: https://polygonscan.com
-- **MetaMask Activity Tab**: Shows all TX history
+- **BaseScan**: https://basescan.org/address/YOUR_ADDRESS
 
 ---
 
@@ -189,44 +179,27 @@ View all your transactions:
 
 ### ❌ "Failed to connect to RPC"
 - Check internet connection
-- Try: `https://polygon.meowrpc.com` as backup
+- Try public fallback: `https://mainnet.base.org`
+
+### ❌ "Chain ID mismatch"
+- Ensure `METAMASK_CHAIN_ID` matches the RPC endpoint
+- Base mainnet = 8453, Base Sepolia = 84532
 
 ### ❌ "Insufficient balance for gas"
-- Need ~0.1 MATIC minimum for ~50 swaps
-- Get from: https://faucet.polygon.technology/
+- Need ETH on Base for gas fees
+- Bridge ETH from Ethereum at https://bridge.base.org
 
 ### ❌ "Transaction reverted"
-- Slippage too high → increase `MAX_SLIPPAGE_PERCENT`
-- Liquidity low → try larger swaps or different token pair
+- Increase slippage tolerance
+- Check token liquidity on https://app.uniswap.org
 
 ---
 
-## Scaling to $30K
+## Deployed Contracts (Base Mainnet)
 
-Once you've proven consistency with micro amounts:
+| Contract | Address |
+|----------|---------|
+| ASIG Token | `0x30610a21764bb38c43a2e532cfba91c9db927994` |
+| SignalRegistry | `0xb5AFac365FD2968157EFF7183144e46F11772926` |
 
-1. **Keep MICRO_TRADING_ENABLED=True** (size scales with balance)
-2. **Increase MICRO_TRADING_BASE_AMOUNT** to $100
-3. **Increase MICRO_MAX_POSITION_SIZE** to $5,000
-4. **Monitor daily**: If win rate > 60% for 30 days, scale further
-
----
-
-## Key Differences: Paper vs Micro Trading
-
-| Aspect | Paper | Micro |
-|--------|-------|-------|
-| **Capital at risk** | $0 | $1-100 |
-| **Gas fees** | No | $0.02-0.10 per trade |
-| **Slippage** | No | Yes (~0.1-0.5%) |
-| **Real profit/loss** | Simulated | Real USDC |
-| **Learning value** | 50% → 100% with micro |
-
----
-
-## Questions?
-
-For technical support:
-- Check `kratos_core/logs/trade_log.json` for full trade history
-- Monitor blockchain: `https://polygonscan.com/address/YOUR_ADDRESS`
-- Test with `UniswapUI`: https://app.uniswap.org on testnet first
+These contracts are integrated via `engine/core/asig_bridge.py`.

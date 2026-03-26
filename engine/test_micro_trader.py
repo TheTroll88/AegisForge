@@ -10,7 +10,7 @@ import sys
 import os
 from pathlib import Path
 
-# Add kratos_core to path
+# Add engine to path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from dotenv import load_dotenv

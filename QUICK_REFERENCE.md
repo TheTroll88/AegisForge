@@ -1,142 +1,118 @@
-# ⚡ LITCOIN Miner — Quick Reference Card
+# ⚡ AegisForge — Quick Reference
 
-## 🚀 One-Minute Setup
+## 🚀 Quick Start
 
-```powershell
-# 1. Set your Bankr API key (get it at bankr.bot/api)
-$env:BANKR_API_KEY = "bk_YOUR_KEY"
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
 
-# 2. Start mining
-.\.venv\Scripts\python.exe litcoin_miner.py
+# 2. Configure environment
+cp .env.example .env
+# Edit .env with your settings
 
-# 3. Check rewards
-.\.venv\Scripts\python.exe litcoin_miner.py --status
+# 3. Start paper trading engine
+cd engine
+python run_engine.py
 
-# 4. Claim on-chain
-.\.venv\Scripts\python.exe litcoin_miner.py --claim
+# 4. Or start the FastAPI server
+cd engine
+python main_fastapi.py
 ```
 
 ---
 
-## 📋 What You Have Ready
+## 📋 Trading Modes
 
-✅ **Environment**
-- Python 3.13.7 (virtual environment configured)
-- All dependencies installed: litcoin, requests, websocket-client
-
-✅ **Scripts**
-- `litcoin_miner.py` — Full-featured standalone miner
-- `run.bat` — Windows launcher (easier than command line)
-
-✅ **Documentation**
-- `SETUP_GUIDE.md` — Detailed walkthrough
-- `README.md` — Project overview
-- `.env.example` — Config template
+| Mode | Risk | Capital | Config |
+|------|------|---------|--------|
+| **Paper** | None | $0 | `PAPER_MODE=true` |
+| **Micro** | Low | $10–100 | `MICRO_MODE=true` |
+| **Live** | High | $30K+ | `LIVE_MODE=true` + Binance keys |
 
 ---
 
-## 🏦 Create Bankr Wallet (Required)
+## 🔑 Required Environment Variables
 
-| Step | Action |
-|------|--------|
-| 1 | Go to https://bankr.bot |
-| 2 | Sign up (email + password) |
-| 3 | Create wallet (appears on Dashboard) |
-| 4 | Get API key at https://bankr.bot/api |
-| 5 | Copy your key: `bk_xxx...` |
-| 6 | (Optional) Fund with ETH for gas |
+```env
+# Trading mode
+PAPER_MODE=true
+MICRO_MODE=false
 
-**Takes: ~5 minutes**
+# Wallet (required for micro/live)
+METAMASK_PRIVATE_KEY=0xYOUR_KEY
+METAMASK_WALLET_ADDRESS=0xYOUR_ADDRESS
+METAMASK_RPC_URL=https://mainnet.base.org
+METAMASK_CHAIN_ID=8453
+
+# AI chat (optional)
+OPENAI_API_KEY=your-openrouter-or-openai-key
+
+# Whale tracker (optional)
+ETHERSCAN_API_KEY=your-key
+BASESCAN_API_KEY=your-key
+```
 
 ---
 
-## ⛏️ Mining Commands
+## 🤖 Strategies
 
-### Comprehension Mining (No AI key needed)
-```powershell
-.\.venv\Scripts\python.exe litcoin_miner.py
-```
-Solves prose reasoning challenges. Earn LITCOIN for each correct answer.
+8 built-in strategies in `engine/strategies/`:
 
-### Research Mining (Requires AI key)
-```powershell
-$env:AI_API_KEY = "sk_YOUR_KEY"
-.\.venv\Scripts\python.exe litcoin_miner.py --research
-```
-Solve real optimization problems. Quality-weighted rewards (up to 110× more for breakthroughs).
-
-### Iterate on One Task (Karpathy-style)
-```powershell
-.\.venv\Scripts\python.exe litcoin_miner.py --loop --task=tokenizer-001 --rounds=50
-```
-Recommended approach — better rewards for focused iteration.
+| Strategy | File |
+|----------|------|
+| RSI | `rsi_strategy.py` |
+| RSI Trend | `rsi_trend_strategy.py` |
+| Bollinger Bands | `bollinger_strategy.py` |
+| MACD | `macd_strategy.py` |
+| Momentum | `momentum_strategy.py` |
+| Breakout | `breakout_strategy.py` |
+| Volume Spike | `volume_spike_strategy.py` |
+| Aegis Fusion | `aegis_fusion_strategy.py` |
 
 ---
 
-## 💰 Claiming Rewards
+## 🌐 API Endpoints (FastAPI)
 
-```powershell
-# Check balance
-.\.venv\Scripts\python.exe litcoin_miner.py --status
-
-# Claim on-chain
-.\.venv\Scripts\python.exe litcoin_miner.py --claim
+```bash
+cd engine && python main_fastapi.py
+# Server starts at http://localhost:8000
 ```
 
-Rewards accumulate at the coordinator, then you claim on-chain via Bankr (no ETH needed if using Bankr wallet).
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | Server status |
+| `/strategies` | GET | List strategies |
+| `/strategy/toggle` | POST | Enable/disable strategy |
+| `/performance` | GET | Performance summary |
+| `/whale-alerts` | GET | Whale movements |
+| `/chat` | POST | AI chat |
 
 ---
 
-## 🔌 Relay Mining (Earn 2× per AI request)
+## 🔗 Deployed Contracts (Base Mainnet)
 
-**Optional: Serve AI inference requests and earn extra LITCOIN**
-
-```powershell
-# Set your AI provider key
-$env:AI_API_KEY = "sk_YOUR_OPENAI_KEY"
-
-# Start mining (relay auto-starts)
-.\.venv\Scripts\python.exe litcoin_miner.py
-```
-
-**Best providers:**
-- **OpenRouter** (free tier): https://openrouter.ai
-- **OpenAI**: https://platform.openai.com
-- **Groq** (fastest): https://groq.com
-- **Together AI**: https://together.ai
-- **Local Ollama** (free, offline): https://ollama.ai
+| Contract | Address |
+|----------|---------|
+| ASIG Token | `0x30610a21764bb38c43a2e532cfba91c9db927994` |
+| SignalRegistry | `0xb5AFac365FD2968157EFF7183144e46F11772926` |
 
 ---
 
-## 💾 Configuration Methods
+## 🛠️ Useful Commands
 
-### Method A: Environment Variables (Recommended)
-```powershell
-$env:BANKR_API_KEY = "bk_YOUR_KEY"
-$env:AI_API_KEY = "sk_YOUR_KEY"
-$env:MODEL = "gpt-4o-mini"
+```bash
+# Test on-chain data feed
+cd engine && python test_data_feed.py
+
+# Test micro trader (requires funded wallet)
+cd engine && python test_micro_trader.py
+
+# Run airdrop farmer (dry run by default)
+cd airdrop-farmer && python farmer.py
+
+# Build token allowlist
+cd engine && python scripts/build_allowlist.py
 ```
-
-### Method B: Permanent (All Sessions)
-```powershell
-[Environment]::SetEnvironmentVariable("BANKR_API_KEY", "bk_YOUR_KEY", "User")
-```
-Restart PowerShell after.
-
-### Method C: Direct Edit
-Open `litcoin_miner.py`, update CONFIG dict.
-
----
-
-## 📊 Monitoring
-
-| Tool | URL/Command |
-|------|-------------|
-| Your Wallet (Bankr) | https://bankr.bot/dashboard |
-| LITCOIN Dashboard | https://litcoiin.xyz/dashboard |
-| LITCOIN Stats | https://litcoiin.xyz/stats |
-| Research Lab | https://litcoiin.xyz/research |
-| API Health | https://api.litcoiin.xyz/v1/health |
 
 ---
 
@@ -144,75 +120,29 @@ Open `litcoin_miner.py`, update CONFIG dict.
 
 | Issue | Solution |
 |-------|----------|
-| "BANKR_KEY not configured" | Set env var: `$env:BANKR_API_KEY = "bk_..."` |
-| "Connection refused" | Check internet, verify API online |
-| "Relay not starting" | Verify AI_API_KEY is set and valid |
-| Not earning rewards | Ensure Bankr key is correct (starts with `bk_`) |
-| SDK import error | Reinstall: `.venv\Scripts\pip install --upgrade litcoin` |
+| "Failed to connect to RPC" | Check `METAMASK_RPC_URL` in `.env` |
+| "Chain ID mismatch" | Set `METAMASK_CHAIN_ID=8453` for Base mainnet |
+| "No private key" | Normal for paper mode; set key for micro/live |
+| "Transaction reverted" | Check slippage settings or token liquidity |
+| Import errors | Run from `engine/` directory |
 
 ---
 
-## 🎯 Earnings Overview
+## 📚 Documentation
 
-| Mining Type | Requirement | Reward | Notes |
-|-------------|-------------|--------|-------|
-| **Comprehension** | Bankr API key | 10% of daily emission | No AI key needed |
-| **Research** | AI API key | 65% of daily emission (quality-weighted) | Breakthroughs earn 110× more |
-| **Staking** | Min 1M LITCOIN | 25% of daily emission + mining boost | Tiers reduce vault collateral |
-| **Relay** | AI API key | 2× mining weight per request | Requires serving AI compute |
-
-**Daily Emission**: ~1.5% of treasury (currently ~13.5M LITCOIN at 2B treasury)
-
----
-
-## 📚 Documentation Files
-
-- **SETUP_GUIDE.md** — Complete setup with Bankr wallet creation steps
-- **README.md** — Project overview
-- **litcoin_miner.py** — Fully commented source code
-- **QUICK_REFERENCE.md** — This file
+- **SETUP_GUIDE.md** — Full setup walkthrough
+- **docs/BLOCKCHAIN_SETUP.md** — Wallet and blockchain configuration
+- **docs/TRADING_MODES.md** — Trading modes comparison
+- **README.md** — Project overview and architecture
 
 ---
 
 ## 🔗 Quick Links
 
-| Resource | Link |
-|----------|------|
-| Bankr Signup | https://bankr.bot |
-| API Keys | https://bankr.bot/api |
-| Stats | https://litcoiin.xyz/stats |
-| Docs | https://litcoiin.xyz/docs |
-| Coordinator | https://api.litcoiin.xyz |
-| PyPI SDK | https://pypi.org/project/litcoin/ |
-
----
-
-## ✅ Your Status
-
-| Item | Status |
-|------|--------|
-| Python 3.9+ | ✅ Python 3.13.7 |
-| Virtual Env | ✅ Configured |
-| SDK + Deps | ✅ Installed (litcoin, requests, websocket-client) |
-| Miner Script | ✅ Ready (litcoin_miner.py) |
-| Windows Launcher | ✅ Ready (run.bat) |
-| Documentation | ✅ Complete (SETUP_GUIDE.md, README.md) |
-| **Bankr Wallet** | ⏳ **TODO** |
-| **API Key** | ⏳ **TODO** |
-
----
-
-## 🚀 Next Steps
-
-1. **Create Bankr wallet** → https://bankr.bot
-2. **Get API key** → https://bankr.bot/api
-3. **Set env variable** → `$env:BANKR_API_KEY = "bk_YOUR_KEY"`
-4. **Start mining** → `.\.venv\Scripts\python.exe litcoin_miner.py`
-5. **Monitor** → https://litcoiin.xyz/dashboard
-6. **Claim** → `.\.venv\Scripts\python.exe litcoin_miner.py --claim`
-
-**Total time to first mine: ~10 minutes**
-
----
-
-**Happy mining! 🏆**
+| Resource | URL |
+|----------|-----|
+| Base Network | https://base.org |
+| Base Bridge | https://bridge.base.org |
+| BaseScan | https://basescan.org |
+| Uniswap (Base) | https://app.uniswap.org |
+| Base Sepolia Faucet | https://www.coinbase.com/faucets/base-ethereum-goerli-faucet |

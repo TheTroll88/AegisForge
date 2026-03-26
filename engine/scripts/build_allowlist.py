@@ -1,7 +1,7 @@
 """Build a wide, vetted allowlist from public tokenlists and on-chain checks.
 
-Run from kratos_core:
-  python scripts/build_allowlist.py
+Run from AegisForge root:
+  python engine/scripts/build_allowlist.py
 
 This script:
 - Fetches tokenlists from TOKENLIST_URLS env (comma-separated)
@@ -58,7 +58,7 @@ def main():
         print("No TOKENLIST_URLS configured.")
         return
 
-    out_path = os.getenv("ALLOWLIST_FILE", os.path.join(project_root, "kratos_core", "data", "allowlist.json"))
+    out_path = os.getenv("ALLOWLIST_FILE", os.path.join(project_root, "engine", "data", "allowlist.json"))
     if not os.path.isabs(out_path):
         out_path = os.path.join(project_root, out_path)
     out_path = os.path.abspath(out_path)
